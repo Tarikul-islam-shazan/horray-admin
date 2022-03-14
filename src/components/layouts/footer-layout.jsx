@@ -6,9 +6,9 @@ const { Footer } = Layout;
 const FooterLayout = ()  =>{
     return (
         <Footer 
-            style={{ textAlign: 'center', background: 'white',color:'black' }}
+            style={{ textAlign: 'center', background: '#fff;',color:'black' }}
         >
-            Horray ©2022 All rights reserved by Horray
+            <b>Horray</b>!© 2022 All rights reserved by <b>Horray!</b>
         </Footer>
 
     );

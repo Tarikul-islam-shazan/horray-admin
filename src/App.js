@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import {  Route, Redirect, Switch } from 'react-router-dom';
+import './App.css';
 import HeaderLayout from './components/layouts/header-layout';
 import SiderLayout from './components/layouts/sider-layout';
 import Dashboard from './components/dashboard';
 import Users from './components/users';
 import FooterLayout from './components/layouts/footer-layout';
+import Marchants from './components/marchants';
 
 const {  Content } = Layout;
 class App extends Component {
@@ -32,10 +34,10 @@ class App extends Component {
         <HeaderLayout 
         collapsed={collapsed} 
         onToggle={this.handleToggle}/>
-        <Layout>
+        <Layout style={{ background: '#800080' }}>
           <SiderLayout collapsed={collapsed} />
           <Layout 
-            style={{ padding: '0 24px 24px'}}
+            
           >
             <Content
                 className="site-layout-background"
@@ -48,12 +50,14 @@ class App extends Component {
               <Switch>
                       <Route path='/dashboard' component={Dashboard}></Route>
                       <Route path='/users' component={Users}></Route>
+                      <Route path='/marchants' component={Marchants}></Route>
                       <Redirect from="/" exact to="/dashboard"/>
               </Switch>
             </Content>
+            <FooterLayout/>
           </Layout>
         </Layout>
-        <FooterLayout/>
+       
       </Layout>
       
       </React.Fragment>
