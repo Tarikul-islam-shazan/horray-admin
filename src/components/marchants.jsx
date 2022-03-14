@@ -4,47 +4,28 @@ import ReusableForm from './common/reuseable-form';
 import { Form,Table, Tag, Space , Modal, Button } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import Joi from 'joi-browser';
+import { getMarchants, saveMarchant } from './services/fakeMarchantService';
 
 class Marchants extends ReusableForm {
     state = {
         data : {
-            brandname: ''
+          marchant: '',
+          phone: '',
+          address:''
           },
           errors: {},
-          tableData : [
-            {
-              key: '1',
-              name: 'Bata',
-              age: 32,
-              address: 'New York No. 1 Lake Park',
-              tags: ['nice', 'developer'],
-            },
-            {
-              key: '2',
-              name: 'Apex',
-              age: 42,
-              address: 'London No. 1 Lake Park',
-              tags: ['loser'],
-            },
-            {
-              key: '3',
-              name: 'Sailor',
-              age: 32,
-              address: 'Sidney No. 1 Lake Park',
-              tags: ['cool', 'teacher'],
-            },
-          ],
+          tableData : [],
           tableColumns : [
             {
-              title: 'Name',
-              dataIndex: 'name',
-              key: 'name',
+              title: 'Marchant',
+              dataIndex: 'marchant',
+              key: 'marchant',
               render: text => <Link to="#">{text}</Link>,
             },
             {
-              title: 'Age',
-              dataIndex: 'age',
-              key: 'age',
+              title: 'Phone',
+              dataIndex: 'phone',
+              key: 'phone',
             },
             {
               title: 'Address',
@@ -52,12 +33,12 @@ class Marchants extends ReusableForm {
               key: 'address',
             },
             {
-              title: 'Tags',
-              key: 'tags',
-              dataIndex: 'tags',
-              render: tags => (
+              title: 'Discount',
+              key: 'discount',
+              dataIndex: 'discount',
+              render: discount => (
                 <>
-                  {tags.map(tag => {
+                  {discount.map(tag => {
                     let color = tag.length > 5 ? 'geekblue' : 'green';
                     if (tag === 'loser') {
                       color = 'volcano';
@@ -77,6 +58,7 @@ class Marchants extends ReusableForm {
               render: (text, record) => (
                 <Space size="middle">
                   <Link to="#" onClick={this.showModal}>
+                    {record.name}
                     <EditOutlined /> Edit
                   </Link>
                   <Link to="#" >Delete</Link>
@@ -86,8 +68,17 @@ class Marchants extends ReusableForm {
           ],
           visible: false
     }
+
     schema = {
-        brandname: Joi.string().required().label('brandname')
+      marchant: Joi.string().required().label('marchant'),
+      phone: Joi.string().required().label('phone'),
+      address: Joi.string().required().label('address'),
+    }
+    
+
+    componentDidMount() {
+      const tableData  = getMarchants();
+      this.setState({ tableData});
     }
 
     showModal = () => {
@@ -101,6 +92,18 @@ class Marchants extends ReusableForm {
             visible: false
         })
     }
+
+    doSubmit = () =>{
+      saveMarchant(this.state.data);
+      const { data } = this.state;
+      let tableData = [...this.state.tableData];
+      const marchant = { key: this.state.tableData.length + 1, ...data, discount : ['20%','Mid'] }
+      tableData.push(marchant);
+      this.setState({ tableData })
+      console.log(marchant);
+      this.hideModal();
+    }
+
     render() {
         const { tableColumns, tableData, visible } = this.state;
         return (
@@ -110,14 +113,16 @@ class Marchants extends ReusableForm {
                     Add
                 </Button>
                 <Modal
-                  title="Marchant Add Form"
+                  title="Add Marchant"
                   visible={visible}
-                  onOk={this.hideModal}
+                  onOk={this.handleSubmit}
                   onCancel={this.hideModal}
                   okText="Add"
                   cancelText="cancle">
                   <Form layout="vertical">
-                    {this.renderInput("brandname","Brand","Enter your brand here.")}
+                    {this.renderInput("marchant","Marchant Name","Enter your Marchant Name here.","text","true")}
+                    {this.renderInput("phone","Telephone No","Enter your Phone No here.","number","true")}
+                    {this.renderInput("address","Office Address","Enter your address here.","text","true")}
                   </Form>
                 </Modal>
             <Table 

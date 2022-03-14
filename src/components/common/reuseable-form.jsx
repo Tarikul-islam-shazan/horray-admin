@@ -54,7 +54,7 @@ class ReusableForm extends Component {
         this.setState({ data, errors });
     }
 
-    renderInput(name, label, placeholder, type="text") {
+    renderInput(name, label, placeholder, type="text",required="false") {
         const { data, errors } = this.state ;
         return ( 
             <FormInput
@@ -65,6 +65,7 @@ class ReusableForm extends Component {
                 value={data[name]}
                 onChange={this.handleChange}
                 error={errors[name]}
+                required={required}
             />
         );
     }
